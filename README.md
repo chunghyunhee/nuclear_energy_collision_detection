@@ -60,19 +60,19 @@ cnn에서는 필터를 지정하고 필터 개수만큼의 feature map을 만들
 
 5. **data agumentation (데이터 증식)할 수 있는 방법?(이슈2를 사용할 수 있는 방법)**
 - 혹은 시계열 데이터 그대로 사용할 수도 있지만 주파수 domain을 변형하여 사용할 수 있는 방법?
-(1) use pooled design or ensemble model 
-(2) new method for signal data
-  - 1) signal segmentation and recombination in the time domain.
+**(1) use pooled design or ensemble model** 
+**(2) new method for signal data**
+  - ***1) signal segmentation and recombination in the time domain.***
 	- 동일한 class에서 데이터를 segmentation하고 random하게 선택하여 concat함으로서 artifitial한 새로운 데이터를 생성한다
 	- 동일 class내에서 하는 작업이므로 feature를 해치치 않는 관점에서 유용한 방법이다. 
 	- 실제로 covariance matrix를 통해 LDA classifier를 사용한 것과 다를 바 없음을 보일 수 있다. 
-  - 2) signal segmentation and recombination in the time frequency design
+  - ***2) signal segmentation and recombination in the time frequency design***
 	- 앞의 방법대로 한다면 단순히 segment값을 concat하는 방식이므로 원치 않는 noise가 발생하게 된다. 
 	- 이를 해결하기 위해 "time frequency domain"을 사용한다. 
 	- transform each bond-passed filtered training trial Ti in a time-frequenct representation TFi using STFT.
 	- TFI_k는 결국 kth time window를 의미한다.
 	- 즉 concatenating together using STFT windows를 하면서 새로운 artifitial data를 생성한다. 
-  - 3) aritifitual trial genertion based on analogy.
+  - ***3) aritifitual trial genertion based on analogy.***
 	- "computing transformation to make trial a similar to trial B and then applying this transformation to trial C and create
 	  artifitial trial D"
 	- 먼저 각 class 의 available data에 대하여 covariance matrix C를 구한다. 
