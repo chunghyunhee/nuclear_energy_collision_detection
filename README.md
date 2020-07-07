@@ -40,6 +40,16 @@
 - 데이터를 2차원 이상의 매트릭스로 정리하는 것은 생각보다 간단함
 - 따라서 이미지 데이터가 아닌 데이터를 어떻게든 2차원 매트릭스로 변환하여 cnn을 적용해보고자 하는 연구가 있었다. 
 - 자연어 인식에서 다루기도 하는 방법이다. 
+- rnn이나 cnn은 등장 순서가 중요한 sequential data를 처리하는데 강점을 가진다. 
+cnn은 필터가 움직이면서 지역적인 정보를 추출, 보존하는 형태로 학습이 이뤄진다. 
+요컨데 RNN은 단어 입력값을 순서대로 처리함으로써, CNN은 문장의 지역정보를 보존
+함으로써 단어/표현의 등장순서를 학습에 반영하는 아키텍쳐 이다. 
+cnn에서는 필터를 지정하고 필터 개수만큼의 feature map을 만들고 max-pooling의 과정을 거쳐
+스코어를 출력하는 네트워크 구조이다. 
+자연어처리에서는 단어벡터를 랜덤하게 초기화한 후 학습과정에서 이를 업데이트하면서
+쓰는 방법을 채택한다. 이런 방식을 사용하기 위해서는 텍스트 문장을 나열로 변환해야 한다
+(참고 블로그 ㅣ https://ratsgo.github.io/natural%20language%20processing/2017/03/19/CNN/)
+
 
 3. 데이터 전처리 방법
 - 신호데이터와 같은 경우는 푸리에를 적용하여 전처리도 가능했다는 점. 
@@ -50,4 +60,24 @@
 
 5. **data agumentation (데이터 증식)할 수 있는 방법?(이슈2를 사용할 수 있는 방법)**
 - 혹은 시계열 데이터 그대로 사용할 수도 있지만 주파수 domain을 변형하여 사용할 수 있는 방법?
---> 이 방법은 어떻게 응용해 볼 수 있는지가 궁금함.
+(1) use pooled design or ensemble model 
+(2) new method for signal data
+  - 1) signal segmentation and recombination in the time domain.
+	- 동일한 class에서 데이터를 segmentation하고 random하게 선택하여 concat함으로서 artifitial한 새로운 데이터를 생성한다
+	- 동일 class내에서 하는 작업이므로 feature를 해치치 않는 관점에서 유용한 방법이다. 
+	- 실제로 covariance matrix를 통해 LDA classifier를 사용한 것과 다를 바 없음을 보일 수 있다. 
+  - 2) signal segmentation and recombination in the time frequency design
+	- 앞의 방법대로 한다면 단순히 segment값을 concat하는 방식이므로 원치 않는 noise가 발생하게 된다. 
+	- 이를 해결하기 위해 "time frequency domain"을 사용한다. 
+	- transform each bond-passed filtered training trial Ti in a time-frequenct representation TFi using STFT.
+	- TFI_k는 결국 kth time window를 의미한다.
+	- 즉 concatenating together using STFT windows를 하면서 새로운 artifitial data를 생성한다. 
+  - 3) aritifitual trial genertion based on analogy.
+	- "computing transformation to make trial a similar to trial B and then applying this transformation to trial C and create
+	  artifitial trial D"
+	- 먼저 각 class 의 available data에 대하여 covariance matrix C를 구한다. 
+	- 이를 바탕으로 고유벡터 V를 구한다 (Princopal Component in data)
+	- and randomly select 3 distinct trials Xa, Xb, Xc
+	- project first two of them to the PC of data and compute signal power pa_i and pb_i.
+	- make Xd using Xc 
+(참고 논문 | Signal processing approaches to minimize or suppress calibration time in oscillatory activity-based Brain-Computer Interfaces )
