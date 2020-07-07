@@ -72,6 +72,10 @@ cnn에서는 필터를 지정하고 필터 개수만큼의 feature map을 만들
 	- transform each bond-passed filtered training trial Ti in a time-frequenct representation TFi using STFT.
 	- TFI_k는 결국 kth time window를 의미한다.
 	- 즉 concatenating together using STFT windows를 하면서 새로운 artifitial data를 생성한다. 
+
+![image](https://user-images.githubusercontent.com/49298791/86796057-27535480-c0a9-11ea-95c8-fdf114146765.png)
+
+
   - ***3) aritifitual trial genertion based on analogy.***
 	- "computing transformation to make trial a similar to trial B and then applying this transformation to trial C and create
 	  artifitial trial D"
