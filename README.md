@@ -26,6 +26,11 @@
 - Adam optimizer을 사용하고 batchsize는 256으로 지정함,
 - 위치(x,y좌표), 질량(m), v(속도)를 따로 학습시켜 예측하는 방법을 사용함. 
 
+(3) **시도3. ipynb**
+- apply resnet, vggnet algorithm 
+- data augmentation(using time frequency domain)
+
+![image](https://user-images.githubusercontent.com/49298791/86868357-81870080-c10f-11ea-9c53-654e2f24ae36.png)
 
 -------------------------------------------------------------------
 1. 모델을 적용하기전, 데이터를 살펴보지 않아, id를 왜 변경해줘야 하는지 이해하지 못함. 
