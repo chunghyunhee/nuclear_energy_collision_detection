@@ -90,3 +90,24 @@ cnn에서는 필터를 지정하고 필터 개수만큼의 feature map을 만들
 	- project first two of them to the PC of data and compute signal power pa_i and pb_i.
 	- make Xd using Xc 
 (참고 논문 | Signal processing approaches to minimize or suppress calibration time in oscillatory activity-based Brain-Computer Interfaces )
+
+6. 추가적으로 residual net 구현
+- residual net : using shortcut and skip connection allows the gradient be
+directly backpropagated to earlier layers.
+- the identitiy block is the standard block used in ResNets, and corresponds to the
+case where the input activation has the same dimention as the output activation
+- the convolutional block is the other type of block. I can use this type when the
+input and output dimentions don't match up.
+- why do skip connections work?
+1) they mitigate the problem of vanishing gradient by allowing this alternate
+shortcut path for gradient to flow throught
+2) they allow the model to learn an identity function which ensures that
+the higher layer will perform at least as good as the lower layer, and not worse.
+- cnn은 학습완료함. resnet은 안되는 이유?
+- resnet에서 weight와 train_target이 꼬여 있어서 문제 발생 
+- 원래 keras.application,resNet50을 사용하면 각각 학습이 불가능하다.
+- **따라서 resNet50 library를 뜯어서 각각 학습이 가능하도록 만들었음. **
+- 바꾼 부분은 해당하는 weight의 경우, loss를 위치 / 질량과 속도에 따라 다르게 구하므로
+이를 각각 weight를 지정하면서 지정해 주었다. 
+- 또한 ensemble design로 만든 형태이므로, 각 weight를 원래 라이브러리에서 
+지정하는 형태가 아닌 다른 형태로 가져와 지정해 줬다. 
