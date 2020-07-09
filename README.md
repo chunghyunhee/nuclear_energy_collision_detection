@@ -36,11 +36,13 @@
 
 -------------------------------------------------------------------
 #### what I do 
-1. 모델을 적용하기전, 데이터를 살펴보지 않아, id를 왜 변경해줘야 하는지 이해하지 못함. 
+
+#### 1. 모델을 적용하기전, 데이터를 살펴보지 않아, id를 왜 변경해줘야 하는지 이해하지 못함. 
 - 분석전에 데이터파일 먼저 열어서 어떻게 전처리해야 모델에 적용할 수 있는지를 반드시 생각해봐야 한다. 
 - ( feature의 의미 뿐만 아니라 데이터 자체가 어떻게 구성되어 있는지를 봐야 한다. ) 
 
-2. cnn 모델에 대한 이해가 필요했음. 이 문제에서는 multi regression을 사용하는 것보다 
+
+#### 2. cnn 모델에 대한 이해가 필요했음. 이 문제에서는 multi regression을 사용하는 것보다 
 - cnn을 사용하는 것이 더 좋은 결과를 얻을 수 있었음. 따라서 resnet이나 vggnet 모델을 생각해봄. 
 - **근데 여기서 왜 cnn을 사용해야 하는지 궁금함.(결정하는 이유나 방법에 대해)**
 - cnn은 이미지 데이터에서만 쓰는 방법은 아님. 2016-2017 연구에서 가장 예측력이 좋은 모델이었음
@@ -59,14 +61,15 @@ cnn에서는 필터를 지정하고 필터 개수만큼의 feature map을 만들
 (참고 블로그 ㅣ https://ratsgo.github.io/natural%20language%20processing/2017/03/19/CNN/)
 
 
-3. 데이터 전처리 방법
+#### 3. 데이터 전처리 방법
 - 신호데이터와 같은 경우는 푸리에를 적용하여 전처리도 가능했다는 점. 
 
-4. 이슈1에 대한 해결
+#### 4. 이슈1에 대한 해결
 - X,Y,M,V를 다같이 하나의 모델로 학습시키는 것보다 각각 따로 학습시키는 것이 더 좋은 결과를 얻을 수가 있었다. 
 - ( 더 정확히 말하면 위치 target과 질량 target, 속도 target으로 나누어 학습시킴 )
 
-5. **data agumentation (데이터 증식)할 수 있는 방법?(이슈2를 사용할 수 있는 방법)**
+
+#### 5. **data agumentation (데이터 증식)할 수 있는 방법?(이슈2를 사용할 수 있는 방법)**
 - 혹은 시계열 데이터 그대로 사용할 수도 있지만 주파수 domain을 변형하여 사용할 수 있는 방법?
 **(1) use pooled design or ensemble model** 
 **(2) new method for signal data**
@@ -94,28 +97,9 @@ cnn에서는 필터를 지정하고 필터 개수만큼의 feature map을 만들
 	- make Xd using Xc 
 (참고 논문 | Signal processing approaches to minimize or suppress calibration time in oscillatory activity-based Brain-Computer Interfaces )
 
-6. 추가적으로 residual net 구현
-- residual net : using shortcut and skip connection allows the gradient be
-directly backpropagated to earlier layers.
-- the identitiy block is the standard block used in ResNets, and corresponds to the
-case where the input activation has the same dimention as the output activation
-- the convolutional block is the other type of block. I can use this type when the
-input and output dimentions don't match up.
-- why do skip connections work?
-1) they mitigate the problem of vanishing gradient by allowing this alternate
-shortcut path for gradient to flow throught
-2) they allow the model to learn an identity function which ensures that
-the higher layer will perform at least as good as the lower layer, and not worse.
-- cnn은 학습완료함. resnet은 안되는 이유?
-- resnet에서 weight와 train_target이 꼬여 있어서 문제 발생 
-- 원래 keras.application,resNet50을 사용하면 각각 학습이 불가능하다.
-- **따라서 resNet50 library를 뜯어서 각각 학습이 가능하도록 만들었음. **
-- 바꾼 부분은 해당하는 weight의 경우, loss를 위치 / 질량과 속도에 따라 다르게 구하므로
-이를 각각 weight를 지정하면서 지정해 주었다. 
-- 또한 ensemble design로 만든 형태이므로, 각 weight를 원래 라이브러리에서 
-지정하는 형태가 아닌 다른 형태로 가져와 지정해 줬다. 
 
-7. **keras.application.ResNet50 framework가 아니라 function을 직접 작성한 이유**
+
+#### 6. **keras.application.ResNet50 framework가 아니라 function을 직접 작성한 이유**
 - residual net : using shortcut and skip connection allows the gradient be
 directly backpropagated to earlier layers.
 - the identitiy block is the standard block used in ResNets, and corresponds to the
