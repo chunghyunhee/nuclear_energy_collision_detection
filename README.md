@@ -10,9 +10,11 @@
 - 평가기준 : E1 -> 거리오차, E2-> 질량과 속도의 상대오차
 -----------------------------------------------------------------
 #### issue 
+
 - **이슈1** : 단일모델 사용 vs 다중모델 사용
 - **이슈2** : 시계열 데이터를 그대로 볼 수도 있지만, 주파수 도메인 변경 혹은 data augumentation을 사용해 볼 수도 있겠다는 점. 
 ------------------------------------------------------------------
+#### code file 
 
 (1) **시도1.ipynb**
 - data를 확인해본 결과, id(충돌체별 고윳값)별로 묶어 특성을 구분할 필요가 있어, time(관측시간)과 각 센서별 가중치를 합하여 column으로 지정함
@@ -33,6 +35,7 @@
 ![image](https://user-images.githubusercontent.com/49298791/86868357-81870080-c10f-11ea-9c53-654e2f24ae36.png)
 
 -------------------------------------------------------------------
+#### what I do 
 1. 모델을 적용하기전, 데이터를 살펴보지 않아, id를 왜 변경해줘야 하는지 이해하지 못함. 
 - 분석전에 데이터파일 먼저 열어서 어떻게 전처리해야 모델에 적용할 수 있는지를 반드시 생각해봐야 한다. 
 - ( feature의 의미 뿐만 아니라 데이터 자체가 어떻게 구성되어 있는지를 봐야 한다. ) 
@@ -107,6 +110,27 @@ the higher layer will perform at least as good as the lower layer, and not worse
 - resnet에서 weight와 train_target이 꼬여 있어서 문제 발생 
 - 원래 keras.application,resNet50을 사용하면 각각 학습이 불가능하다.
 - **따라서 resNet50 library를 뜯어서 각각 학습이 가능하도록 만들었음. **
+- 바꾼 부분은 해당하는 weight의 경우, loss를 위치 / 질량과 속도에 따라 다르게 구하므로
+이를 각각 weight를 지정하면서 지정해 주었다. 
+- 또한 ensemble design로 만든 형태이므로, 각 weight를 원래 라이브러리에서 
+지정하는 형태가 아닌 다른 형태로 가져와 지정해 줬다. 
+
+7. **keras.application.ResNet50 framework가 아니라 function을 직접 작성한 이유**
+- residual net : using shortcut and skip connection allows the gradient be
+directly backpropagated to earlier layers.
+- the identitiy block is the standard block used in ResNets, and corresponds to the
+case where the input activation has the same dimention as the output activation
+- the convolutional block is the other type of block. I can use this type when the
+input and output dimentions don't match up.
+- why do skip connections work?
+1) they mitigate the problem of vanishing gradient by allowing this alternate
+shortcut path for gradient to flow throught
+2) they allow the model to learn an identity function which ensures that
+the higher layer will perform at least as good as the lower layer, and not worse.
+- cnn은 학습완료함. resnet은 안되는 이유?
+- resnet에서 weight와 train_target이 꼬여 있어서 문제 발생 
+- 원래 keras.application,resNet50을 사용하면 각각 학습이 불가능하다.
+- **따라서 resNet50 library를 뜯어서 각각 학습이 가능하도록 만들었음.**
 - 바꾼 부분은 해당하는 weight의 경우, loss를 위치 / 질량과 속도에 따라 다르게 구하므로
 이를 각각 weight를 지정하면서 지정해 주었다. 
 - 또한 ensemble design로 만든 형태이므로, 각 weight를 원래 라이브러리에서 
